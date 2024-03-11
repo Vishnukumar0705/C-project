@@ -1,0 +1,206 @@
+#include <stdio.h>
+void main()
+{
+    int choose;
+    char continueProcess[5], ContinuePurchase[5], Continue[5];
+    char ProductName[20][30], ConsumerName[30], CustomerProduct[20][30];
+    int price[30], billindex, index, viewindex, searchindex, findtotal, totalindex, customerindex, checkindex, bill;
+    long int amount[30], CustomerPrice[30];
+    index = 0;
+    viewindex = 0;
+    customerindex = 0;
+    findtotal = 0;
+    totalindex = 0;
+    billindex = 0;
+    bill = 1;
+    float quantity[30], CustomerQuantity[30];
+    do
+    {
+        printf("******************************\n");
+        printf("\t'ViShNu' Store\n");
+        printf("******************************\n\n");
+        printf("1.Add product\n");
+        printf("2.View product\n");
+        printf("3.Purchase\n");
+        printf("4.Bill\n");
+        printf("5.Exit\n\n");
+        printf("Enter the number between(1 to 5):");
+        scanf("%d", &choose);
+        switch (choose)
+        {
+        case 1:
+            printf("---------------------------\n");
+            printf("      ADD PRODUCT\n");
+            printf("---------------------------\n");
+            do
+            {
+                printf("Product Name      :");
+                scanf("%s", &ProductName[index]);
+                printf("Quantity          :");
+                scanf("%f", &quantity[index]);
+                printf("Price per Product :");
+                scanf("%d", &price[index]);
+                index++;
+                printf("\n");
+                printf("Product is Added\n");
+                printf("Do you want add  another Product(yes or no):");
+                scanf("%s", &Continue);
+            } while (strcmp(Continue, "yes") == 0);
+            printf("\n");
+            break;
+        case 2:
+            if (index == 0)
+            {
+                printf("\n");
+                printf("      (Add the product)\n\n");
+            }
+            else
+            {
+                printf("---------------------------\n");
+                printf("     VIEW PRODUCT\n");
+                printf("---------------------------\n");
+                printf("***************************************\n");
+                printf("Product Name\t");
+                printf("Quantity\t");
+                printf("Price\n");
+                printf("***************************************\n");
+                viewindex = 0;
+                while (viewindex < index)
+                {
+                    printf("%s\t\t", ProductName[viewindex]);
+                    printf("%2.f\t\t", quantity[viewindex]);
+                    printf("%d\n", price[viewindex]);
+                    viewindex++;
+                }
+                printf("***************************************\n");
+                printf("\n");
+            }
+            break;
+
+        case 3:
+            if (index == 0)
+            {
+                printf("\n");
+                printf("    (Add the Product)\n\n");
+            }
+            else
+            {
+                printf("-------------------------\n");
+                printf("        PURCHASE\n");
+                printf("-------------------------\n");
+                printf("Consumer Name:");
+                scanf("%s", &ConsumerName);
+                customerindex = 0;
+                do
+                {
+                    // customerindex = 0;
+                    printf("Product Name\t:");
+
+                    scanf("%s", &CustomerProduct[customerindex]);
+                    fflush(stdin);
+                    searchindex = 0;
+                    while (searchindex < index)
+                    {
+                        if (strcmp(CustomerProduct[customerindex], ProductName[searchindex]) == 0)
+
+                        {
+                            printf("Quantity\t:");
+                            scanf("%f", &CustomerQuantity[customerindex]);
+                            fflush(stdin);
+
+                            if (CustomerQuantity[customerindex] >= quantity[searchindex])
+                            {
+                                printf("     %2.f", quantity[searchindex]);
+                                printf(" Stock only Available\n");
+                                break;
+                            }
+                            else
+                            {
+                                printf("Price\t\t:");
+                                CustomerPrice[customerindex] = price[searchindex];
+                                printf("%ld\n", CustomerPrice[customerindex]);
+                                quantity[searchindex] = quantity[searchindex] - CustomerQuantity[customerindex];
+                                amount[customerindex] = CustomerQuantity[customerindex] * CustomerPrice[customerindex];
+                                printf("Total\t\t:");
+                                printf("%ld\n", amount[customerindex]);
+                                customerindex++;
+                            }
+                            break;
+                        }
+                        searchindex++;
+                    }
+                    if (searchindex == index)
+                    {
+                        printf("This product is not available\n");
+                    }
+                    printf("Do you continue purchase(yes/no)\t:\t");
+                    scanf("%s", &ContinuePurchase);
+                } while (strcmp(ContinuePurchase, "yes") == 0);
+            }
+            break;
+
+        case 4:
+            if (customerindex == 0)
+            {
+                printf("\n");
+                printf("   First Purchase the  Product\n\n");
+                break;
+            }
+            else
+            {
+                printf("**********************************************************************************\n");
+                printf("\t\t\t\tViShNu Store\n");
+                printf("**********************************************************************************\n");
+                printf("\t\t\tVillapuram,");
+                printf("Madaurai-625012.\n");
+                printf("Customer Name:");
+                printf("%s", ConsumerName);
+                printf("\t\t\t\t\t\tDate:%s", __DATE__);
+                printf("\n");
+                printf("Bill No:");
+                printf("%d", bill);
+                printf("\t\t\t\t\t\t\tTime:%s", __TIME__);
+                printf("\n");
+                printf("----------------------------------------------------------------------------------\n");
+                printf("\t\t\t\t'Billing'\n");
+                printf("----------------------------------------------------------------------------------\n");
+                printf("\tPRODUCT NAME\t\t");
+                printf("QUANTITY\t\t");
+                printf("PRICE\t\t");
+                printf("TOTAL\n");
+                printf("----------------------------------------------------------------------------------\n");
+                billindex = 0;
+                while (billindex < customerindex)
+                {
+                    printf("\t%s\t\t", CustomerProduct[billindex]);
+                    printf("\t%2.f\t\t", CustomerQuantity[billindex]);
+                    printf("\t%d\t\t", CustomerPrice[billindex]);
+                    printf("%d\n", amount[billindex]);
+                    billindex++;
+                }
+                printf("----------------------------------------------------------------------------------\n");
+                printf("\t\t\t\t\t\t\tTotal Amount:\t");
+                while (totalindex < customerindex)
+                {
+                    findtotal = findtotal + amount[totalindex];
+                    totalindex++;
+                }
+                printf("%d\n", findtotal);
+                printf("\n");
+            }
+            bill++;
+            break;
+
+        case 5:
+            printf("---------------------------\n");
+            printf("        EXIT\n");
+            printf("---------------------------\n");
+            exit(0);
+            break;
+        }
+        printf("Do you want continue on Main Menu(yes or no):\t");
+        scanf("%s", &continueProcess);
+        fflush(stdin);
+    } while (strcmp(continueProcess, "no") != 0);
+    printf("\n");
+}
